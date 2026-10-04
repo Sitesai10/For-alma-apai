@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Teacher's Day!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --accent-color: #3b82f6;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Экран приветствия / Стартовая кнопка */
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .welcome-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 24px;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .welcome-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+
+        .welcome-card p {
+            color: #94a3b8;
+            margin-bottom: 24px;
+            font-size: 1rem;
+        }
+
+        .start-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.5);
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            background-color: #2563eb;
+        }
+
+        /* Фоновый аудио-плеер плавающий */
+        .audio-player-widget {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            cursor: pointer;
+        }
+
+        .disc-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #0f172a;
+            border: 2px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 12px;
+        }
+
+        .disc-icon.playing {
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Hero-секция */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%);
+        }
+
+        .hero-badge {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-color);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .letter-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 80px;
+        }
+
+        .letter-content {
+            font-size: 1.15rem;
+            color: #334155;
+            line-height: 1.8;
+        }
+
+        .handwritten-signature {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2rem;
+            color: var(--accent-color);
+            margin-top: 30px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 80px;
+        }
+
+        .photo-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .photo-wrapper {
+            width: 100%;
+            height: 240px;
+        }
+
+        .photo-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-caption {
+            padding: 16px 20px;
+            font-weight: 600;
+        }
+
+        .footer-wish {
+            text-align: center;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 60px 20px;
+            border-radius: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Стартовый экран для автоматического запуска музыки -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <div class="welcome-card">
+            <h2>You Have a Message from ur best student!✉️</h2>
+            <p>Click below to open your Teacher's Day greeting card.</p>
+            <button class="start-btn" id="startBtn">Open Greeting ✨</button>
+        </div>
+    </div>
+
+    <!-- Плавающий плеер -->
+    <div class="audio-player-widget" id="audioToggle">
+        <div class="disc-icon" id="disc">🎵</div>
+        <span style="font-weight: 600; font-size: 0.95rem; color: #1e293b;" id="audioStatus">Play Music</span>
+    </div>
+
+    <!-- Аудио файл -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Главная страница -->
+    <header class="hero">
+        <div class="hero-badge">Teacher's Day Special</div>
+        <h1>Happy Teacher's Day!</h1>
+        <p>Thank you for inspiring us every single day, guiding us with patience, and making learning an amazing journey.</p>
+    </header>
+
+    <div class="container">
+        <section class="letter-card">
+            <div class="letter-content">
+                <p><strong>Dear Teacher,</strong></p>
+                <p>Happy Teacher’s Day Alma apai! On this special day, I wanted to create something meaningful to express my sincere gratitude for everything you do for our class.</p>
+                <p>As our English teacher and form tutor, you don't just teach us lessons from textbook pages — you inspire us to think broader, speak with confidence, cut our curly hair and aim higher every single day.</p>
+                <p>Thank you for being more than just a teacher — thank you for being a mentor we can always rely on.</p>
+                <div class="handwritten-signature">
+                    With deep respect and appreciation,<br>
+                    Aboka
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-title">
+                <h2>Best Memories</h2>
+                <p>A few moments from our journey together</p>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="photo-card">
+                    <div class="photo-wrapper"><img src="photo1.jpg" alt="Memory 1"></div>
+                    <div class="photo-caption">Old but gold (also corny)</div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-wrapper"><img src="photo2.jpg" alt="Memory 2"></div>
+                    <div class="photo-caption">Class Events & Celebrations</div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-wrapper"><img src="photo3.jpg" alt="Memory 3"></div>
+                    <div class="photo-caption">School Days & Moments</div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-wrapper"><img src="photo4.jpg" alt="Memory 4"></div>
+                    <div class="photo-caption">Class of ltns</div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-wrapper"><img src="photo5.jpg" alt="Memory 5"></div>
+                    <div class="photo-caption">Unforgettable Days</div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-wrapper"><img src="photo6.jpg" alt="Memory 6"></div>
+                    <div class="photo-caption">Class of 2026 (hope so)</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer-wish">
+            <h3>Wishing You Joy, Inspiration & Success!</h3>
+            <p>May every day bring you reasons to smile. Thank you for everything! (including letting us go home after 6th lesson) </p>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('bgMusic');
+        const audioToggle = document.getElementById('audioToggle');
+        const disc = document.getElementById('disc');
+        const audioStatus = document.getElementById('audioStatus');
+        const startBtn = document.getElementById('startBtn');
+        const welcomeOverlay = document.getElementById('welcomeOverlay');
+
+        let isPlaying = false;
+
+        // Запуск при нажатии на кнопку "Open Greeting"
+        startBtn.addEventListener('click', () => {
+            welcomeOverlay.classList.add('hidden');
+            audio.play().then(() => {
+                isPlaying = true;
+                disc.classList.add('playing');
+                audioStatus.textContent = 'Pause Music';
+            }).catch(err => {
+                console.log("Audio error:", err);
+            });
+        });
+
+        // Управление через плавающую кнопку
+        audioToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                disc.classList.remove('playing');
+                audioStatus.textContent = 'Play Music';
+                isPlaying = false;
+            } else {
+                audio.play();
+                disc.classList.add('playing');
+                audioStatus.textContent = 'Pause Music';
+                isPlaying = true;
+            }
+        });
+    </script>
+</body>
+</html>
